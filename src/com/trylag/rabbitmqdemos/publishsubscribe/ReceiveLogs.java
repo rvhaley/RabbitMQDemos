@@ -28,13 +28,13 @@ public class ReceiveLogs {
         Channel channel = connection.createChannel();
 
         // Declare the exchange in fanout (Publish/Subscribe) mode
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+        channel.exchangeDeclare(EXCHANGE_NAME_PUBLISH_SUBSCRIBE, "fanout");
 
         // Create a non-durable, exclusive, autodelete queue with a generated name
         String queueName = channel.queueDeclare().getQueue();
         
         // Tell exchange to bind to this generated queue
-        channel.queueBind(queueName, EXCHANGE_NAME, "");
+        channel.queueBind(queueName, EXCHANGE_NAME_PUBLISH_SUBSCRIBE, "");
 
         System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 

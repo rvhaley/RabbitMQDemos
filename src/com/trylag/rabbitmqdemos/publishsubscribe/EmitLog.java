@@ -27,13 +27,13 @@ public class EmitLog {
         Channel channel = connection.createChannel();
 
         // Declare the exchange in fanout (Publish/Subscribe) mode
-        channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+        channel.exchangeDeclare(EXCHANGE_NAME_PUBLISH_SUBSCRIBE, "fanout");
 
         // Get message from command line parameters to main
         String message = getMessage(args);
 
         // Publish to logs exchange with empty routing key
-        channel.basicPublish(EXCHANGE_NAME, "", null, message.getBytes());
+        channel.basicPublish(EXCHANGE_NAME_PUBLISH_SUBSCRIBE, "", null, message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
 
         // Close channel and connection
@@ -64,7 +64,7 @@ public class EmitLog {
      * @param strings An array of String objects. The parameters to main.
      * @param delimiter A String to delimit with while appending.
      * @return A String object concatenation of array elements, or an empty
-     * String
+     * String.
      */
     private static String joinStrings(String[] strings, String delimiter) {
         int length = strings.length;
