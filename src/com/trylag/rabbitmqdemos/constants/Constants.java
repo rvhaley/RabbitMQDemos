@@ -4,7 +4,7 @@ package com.trylag.rabbitmqdemos.constants;
  *
  * @author Richard Haley III
  */
-public class Constants {
+public interface Constants {
 
     /*
      Connection details
