@@ -34,4 +34,9 @@ public interface Constants {
      * Routing
      */
     public static final String EXCHANGE_NAME_ROUTING = "rh11_direct_logs";
+
+    /**
+     * Topics
+     */
+    public static final String EXCHANGE_NAME_TOPICS = "rh11_topic_logs";
 }

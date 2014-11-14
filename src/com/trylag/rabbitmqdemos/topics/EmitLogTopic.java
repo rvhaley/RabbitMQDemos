@@ -1,9 +1,8 @@
-package com.trylag.rabbitmqdemos.routing;
+package com.trylag.rabbitmqdemos.topics;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import java.io.IOException;
 
 import static com.trylag.rabbitmqdemos.constants.Constants.*;
 
@@ -11,47 +10,59 @@ import static com.trylag.rabbitmqdemos.constants.Constants.*;
  *
  * @author Richard Haley III
  */
-public class EmitLogDirect {
+public class EmitLogTopic {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        // Create a connection factory with connection details
-        ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost(CONNECTION_HOST);
-        Connection connection = factory.newConnection();
+        Connection connection = null;
+        Channel channel = null;
 
-        // Create a channel from the connection
-        Channel channel = connection.createChannel();
+        try {
+            // Create a connection factory with connection details
+            ConnectionFactory factory = new ConnectionFactory();
+            factory.setHost(CONNECTION_HOST);
+            connection = factory.newConnection();
 
-        // Send messages to exchange in direct mode
-        channel.exchangeDeclare(EXCHANGE_NAME_ROUTING, "direct");
+            // Create a channel from the connection
+            channel = connection.createChannel();
 
-        // Get log severity and log message
-        String severity = getSeverity(args);
-        String message = getMessage(args);
+            // Send messages to exchange in topic mode
+            channel.exchangeDeclare(EXCHANGE_NAME_TOPICS, "topic");
 
-        // Publish to direct exchange with log severity as routing key
-        channel.basicPublish(EXCHANGE_NAME_ROUTING, severity, null, message.getBytes());
-        System.out.println(" [x] Sent '" + severity + "':'" + message + "'");
+            // Get routing key and log message
+            String routingKey = getRouting(args);
+            String message = getMessage(args);
 
-        // Close channel and connection
-        channel.close();
-        connection.close();
+            // Publish to topic exchange with routing key from main arguments
+            channel.basicPublish(EXCHANGE_NAME_TOPICS, routingKey, null, message.getBytes());
+            System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (Exception ignore) {
+                }
+            }
+        }
     }
 
     /**
-     * Gets log severity level from the first element in the String array
-     * parameter, returns "info" if array is empty.
+     * Gets log routing key from first element in main arguments String array.
+     * Returns "anonymous.info" if array is empty.
      *
      * @param strings An array of String objects. The parameters to main.
-     * @return A String object, returns "info" if parameter array is empty.
+     * @return A String object, returns "anonymous.info" if parameter array is
+     * empty.
      */
-    private static String getSeverity(String[] strings) {
+    private static String getRouting(String[] strings) {
         if (strings.length < 1) {
-            return "info";
+            return "anonymous.info";
         }
         return strings[0];
     }

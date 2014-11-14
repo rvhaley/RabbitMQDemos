@@ -43,7 +43,7 @@ public class EmitLog {
 
     /**
      * Checks if main method parameters array is at least one element in length,
-     * and returns a concatenation of the array elements, or Hello, World! if
+     * and returns a concatenation of the array elements, or "Hello, World!" if
      * array size is zero.
      *
      * @param strings An array of String objects. The parameters to main.
