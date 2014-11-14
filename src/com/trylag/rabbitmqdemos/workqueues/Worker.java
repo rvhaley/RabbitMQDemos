@@ -22,9 +22,6 @@ public class Worker {
         // Create a connection factory with connection details
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(CONNECTION_HOST);
-        factory.setPort(CONNECTION_PORT);
-        factory.setUsername(CONNECTION_USERNAME);
-        factory.setPassword(CONNECTION_PASSWORD);
         Connection connection = factory.newConnection();
 
         // Create a channel from the connection
@@ -43,9 +40,11 @@ public class Worker {
         while (true) {
             QueueingConsumer.Delivery delivery = consumer.nextDelivery();
             String message = new String(delivery.getBody());
+            
             System.out.println(" [x] Received '" + message + "'");
             doWork(message);
             System.out.println(" [x] Done");
+            
             channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         }
     }

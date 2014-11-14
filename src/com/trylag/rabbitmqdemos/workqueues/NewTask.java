@@ -3,6 +3,7 @@ package com.trylag.rabbitmqdemos.workqueues;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.MessageProperties;
 import java.io.IOException;
 
 import static com.trylag.rabbitmqdemos.constants.Constants.*;
@@ -18,25 +19,22 @@ public class NewTask {
      */
     public static void main(String[] args) throws IOException {
 
-        // Get message from command line parameters to main
-        String message = getMessage(args);
-
         // Create a connection factory with connection details
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost(CONNECTION_HOST);
-        factory.setPort(CONNECTION_PORT);
-        factory.setUsername(CONNECTION_USERNAME);
-        factory.setPassword(CONNECTION_PASSWORD);
         Connection connection = factory.newConnection();
 
         // Create a channel from the connection
         Channel channel = connection.createChannel();
 
-        // Declare a queue to publish to
-        channel.queueDeclare(TASK_QUEUE_NAME, false, false, false, null);
+        // Declare a queue to publish to, enable message durability
+        channel.queueDeclare(TASK_QUEUE_NAME, true, false, false, null);
+
+        // Get message from command line parameters to main
+        String message = getMessage(args);
 
         // Publish to the queue using the default exchange, the first param in basicPublish()
-        channel.basicPublish("", TASK_QUEUE_NAME, null, message.getBytes());
+        channel.basicPublish("", TASK_QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
 
         // Close the channel and connection
