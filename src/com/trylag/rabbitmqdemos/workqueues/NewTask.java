@@ -33,10 +33,10 @@ public class NewTask {
         Channel channel = connection.createChannel();
 
         // Declare a queue to publish to
-        channel.queueDeclare(WORK_QUEUE, false, false, false, null);
+        channel.queueDeclare(TASK_QUEUE_NAME, false, false, false, null);
 
         // Publish to the queue using the default exchange, the first param in basicPublish()
-        channel.basicPublish("", WORK_QUEUE, null, message.getBytes());
+        channel.basicPublish("", TASK_QUEUE_NAME, null, message.getBytes());
         System.out.println(" [x] Sent '" + message + "'");
 
         // Close the channel and connection

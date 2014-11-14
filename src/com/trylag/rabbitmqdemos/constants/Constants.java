@@ -6,22 +6,22 @@ package com.trylag.rabbitmqdemos.constants;
  */
 public interface Constants {
 
-    /*
-     Connection details
+    /**
+     * Connection details
      */
     public static final String CONNECTION_HOST = "datdb.cphbusiness.dk";
     public static final int CONNECTION_PORT = 5672;
     public static final String CONNECTION_USERNAME = "student";
     public static final String CONNECTION_PASSWORD = "cph";
 
-    /*
-     Hello world
+    /**
+     * Hello, world!
      */
     public static final String HELLO_MESSAGE = "Hello, World!";
     public static final String HELLO_QUEUE = "rh11_hello";
 
-    /*
-     Work queues
+    /**
+     * Work Queues
      */
-    public static final String WORK_QUEUE = "rh11_workqueue";
+    public static final String TASK_QUEUE_NAME = "rh11_task_queue";
 }
