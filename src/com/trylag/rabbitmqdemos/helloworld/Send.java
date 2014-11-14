@@ -32,7 +32,7 @@ public class Send {
         // Declare a queue to publish to
         channel.queueDeclare(HELLO_QUEUE, false, false, false, null);
 
-        // Publish to the queue using the default exchange.... first param in basicPublish()
+        // Publish to the queue using the default exchange, the first param in basicPublish()
         channel.basicPublish("", HELLO_QUEUE, null, HELLO_MESSAGE.getBytes());
         System.out.println(" [X] Sent : '" + HELLO_MESSAGE + "'");
 

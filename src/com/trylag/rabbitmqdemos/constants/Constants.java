@@ -19,4 +19,9 @@ public interface Constants {
      */
     public static final String HELLO_MESSAGE = "Hello, World!";
     public static final String HELLO_QUEUE = "rh11_hello";
+
+    /*
+     Work queues
+     */
+    public static final String WORK_QUEUE = "rh11_workqueue";
 }
