@@ -3,6 +3,7 @@ package com.trylag.rabbitmqdemos.helloworld;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
+import com.rabbitmq.client.QueueingConsumer;
 import java.io.IOException;
 
 import static com.trylag.rabbitmqdemos.constants.Constants.*;
@@ -11,12 +12,12 @@ import static com.trylag.rabbitmqdemos.constants.Constants.*;
  *
  * @author Richard Haley III
  */
-public class Send {
+public class Receive {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
         // Create a connection factory with connection details
         ConnectionFactory factory = new ConnectionFactory();
@@ -29,15 +30,18 @@ public class Send {
         // Create a channel from the connection
         Channel channel = connection.createChannel();
 
-        // Declare a queue to publish to
+        // Declare the queue to consume from
+        // Queue is also declared here in the event the receiver is started before sender
         channel.queueDeclare(HELLO_QUEUE, false, false, false, null);
+        System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
-        // Publish to the queue using the default exchange.... first param in basicPublish()
-        channel.basicPublish("", HELLO_QUEUE, null, HELLO_MESSAGE.getBytes());
-        System.out.println(" [X] Sent : '" + HELLO_MESSAGE + "'");
+        QueueingConsumer consumer = new QueueingConsumer(channel);
+        channel.basicConsume(HELLO_QUEUE, true, consumer);
 
-        // Close the channel and connection
-        channel.close();
-        connection.close();
+        while (true) {
+            QueueingConsumer.Delivery delivery = consumer.nextDelivery();
+            String message = new String(delivery.getBody());
+            System.out.println(" [x] Received '" + message + "'");
+        }
     }
 }
