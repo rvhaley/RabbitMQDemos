@@ -24,4 +24,9 @@ public interface Constants {
      * Work Queues
      */
     public static final String TASK_QUEUE_NAME = "rh11_task_queue";
+    
+    /**
+     * Publish/Subscribe
+     */
+    public static final String EXCHANGE_NAME = "rh11_logs";
 }
