@@ -7,6 +7,7 @@ import com.rabbitmq.client.MessageProperties;
 import java.io.IOException;
 
 import static com.trylag.rabbitmqdemos.constants.Constants.*;
+import java.util.concurrent.TimeoutException;
 
 /**
  *
@@ -17,7 +18,7 @@ public class NewTask {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, TimeoutException {
 
         // Create a connection factory with connection details
         ConnectionFactory factory = new ConnectionFactory();
